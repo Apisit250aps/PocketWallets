@@ -12,3 +12,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String?  @unique
+  username  String   @unique @db.VarChar(255)
+  password  String
+  createdAt DateTime @default(now())
+  isAdmin   Boolean  @default(false)
+  wallet    Wallet[]
+}
+
+model Wallet {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  desc         String?
+  createdAt    DateTime      @default(now())
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int
+  transactions Transaction[]
+}
+
+model Transaction {
+  id             Int               @id @default(autoincrement())
+  name           String            @db.VarChar(255)
+  desc           String?
+  date           DateTime
+  amount         Decimal           @db.Decimal(10, 2)
+  createdAt      DateTime          @default(now())
+  wallet         Wallet            @relation(fields: [walletId], references: [id])
+  walletId       Int
+  transactionTag TransactionTags[]
+}
+
+model Tag {
+  id             Int               @id @default(autoincrement())
+  name           String            @db.VarChar(255)
+  desc           String?
+  transactionTag TransactionTags[]
+}
+
+model TransactionTags {
+  id            Int         @id @default(autoincrement())
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  tag           Tag         @relation(fields: [tagId], references: [id])
+  transactionId Int
+  tagId         Int
+}
