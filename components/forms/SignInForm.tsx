@@ -1,10 +1,12 @@
 "use client"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 function SignInForm() {
   const [username, setUsername] = useState<string>()
   const [password, setPassword] = useState<string>()
-
+  const router = useRouter()
   const handlerSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
@@ -16,6 +18,14 @@ function SignInForm() {
       })
       if (result?.error) {
         console.error(result?.error)
+        Swal.fire({
+          title: "Error",
+          text: "Sign in error!",
+          icon: "error"
+        })
+      }
+      if(result?.ok){
+        router.replace("/")
       }
     } catch (error) {}
   }

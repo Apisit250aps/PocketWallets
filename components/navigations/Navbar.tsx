@@ -1,9 +1,11 @@
+"use client"
 import { ReactNode } from "react"
-
+import { signOut } from "next-auth/react"
 function Navbar({
   label,
-  title
-}: Readonly<{ label: ReactNode; title: string }>) {
+  title,
+  username
+}: Readonly<{ label: ReactNode; title: string; username: string }>) {
   return (
     <div
       className="navbar bg-base-100 shadow-none sticky top-0"
@@ -34,14 +36,14 @@ function Navbar({
             <li>
               <a className="justify-between">
                 Profile
-                <span className="badge">New</span>
+                <span className="badge">{username}</span>
               </a>
             </li>
             <li>
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <button onClick={() => signOut()}>Sign out</button>
             </li>
           </ul>
         </div>

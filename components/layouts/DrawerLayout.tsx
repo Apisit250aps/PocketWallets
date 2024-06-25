@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import Navbar from "../navigations/Navbar"
-
+import { auth } from "@/auth"
 function LabelButton() {
   return (
     <label
@@ -25,11 +25,16 @@ function LabelButton() {
 }
 
 async function Drawer({ children }: Readonly<{ children: ReactNode }>) {
+  const session = await auth()
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content bg-base-300">
-        <Navbar label={<LabelButton />} title="Wallet" />
+        <Navbar
+          label={<LabelButton />}
+          title="Wallet"
+          username={session?.user?.name as string}
+        />
         {children}
       </div>
       <div id="side-bar" className="drawer-side min-h-full lg:min-h-0">
