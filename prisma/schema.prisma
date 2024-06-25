@@ -14,48 +14,74 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String?  @unique
-  username  String   @unique @db.VarChar(255)
-  password  String
+  id            String          @id @default(cuid())
+  name          String          @unique
+  email         String          @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Permissions
+  isAdmin       Boolean         @default(false)
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+  // Timestamp
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
   createdAt DateTime @default(now())
-  isAdmin   Boolean  @default(false)
-  wallet    Wallet[]
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
 }
 
-model Wallet {
-  id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(255)
-  desc         String?
-  createdAt    DateTime      @default(now())
-  user         User          @relation(fields: [userId], references: [id])
-  userId       Int
-  transactions Transaction[]
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Transaction {
-  id             Int               @id @default(autoincrement())
-  name           String            @db.VarChar(255)
-  desc           String?
-  date           DateTime
-  amount         Decimal           @db.Decimal(10, 2)
-  createdAt      DateTime          @default(now())
-  wallet         Wallet            @relation(fields: [walletId], references: [id])
-  walletId       Int
-  transactionTag TransactionTags[]
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }
 
-model Tag {
-  id             Int               @id @default(autoincrement())
-  name           String            @db.VarChar(255)
-  desc           String?
-  transactionTag TransactionTags[]
-}
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
 
-model TransactionTags {
-  id            Int         @id @default(autoincrement())
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  tag           Tag         @relation(fields: [tagId], references: [id])
-  transactionId Int
-  tagId         Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
