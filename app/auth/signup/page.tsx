@@ -1,3 +1,4 @@
+"use server"
 import SignUpForm from "@/components/forms/SignUpForm"
 function Page() {
   return (

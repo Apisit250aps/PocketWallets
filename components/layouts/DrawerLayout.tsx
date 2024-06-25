@@ -1,5 +1,4 @@
 import { ReactNode } from "react"
-
 import Navbar from "../navigations/Navbar"
 
 function LabelButton() {
@@ -25,7 +24,7 @@ function LabelButton() {
   )
 }
 
-function Drawer({ children }: Readonly<{ children: ReactNode }>) {
+async function Drawer({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

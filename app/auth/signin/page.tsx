@@ -1,3 +1,5 @@
+"use server"
+import SignInForm from "@/components/forms/SignInForm"
 
 function Page() {
   return (
@@ -12,6 +14,7 @@ function Page() {
           </p>
         </div>
         {/* Form */}
+        <SignInForm />
       </div>
     </div>
   )

@@ -86,7 +86,7 @@ function SignUpForm() {
             required
           />
           <label className="label">
-            <a href="#" className="label-text-alt link link-hover">
+            <a href="/auth/signin" className="label-text-alt link link-hover">
               Back to sign in
             </a>
           </label>
