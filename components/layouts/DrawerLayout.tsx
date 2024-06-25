@@ -51,13 +51,6 @@ async function Drawer({ children }: Readonly<{ children: ReactNode }>) {
           <li>
             <a>Transactions</a>
           </li>
-          <div className="divider"></div>
-          <li>
-            <a>Account</a>
-          </li>
-          <li className="">
-            <a className="bg-red-500 text-white  ">logout</a>
-          </li>
         </ul>
       </div>
     </div>
