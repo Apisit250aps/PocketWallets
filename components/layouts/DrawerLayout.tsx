@@ -1,6 +1,9 @@
 import { ReactNode } from "react"
 import Navbar from "../navigations/Navbar"
 import { auth } from "@/auth"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+
 function LabelButton() {
   return (
     <label
@@ -46,10 +49,10 @@ async function Drawer({ children }: Readonly<{ children: ReactNode }>) {
         <ul className="menu p-4 w-1/2 min-h-full bg-base-100 text-base-content">
           {/* Sidebar content here */}
           <li>
-            <a>Home</a>
+            <Link href="/" >Home</Link>
           </li>
           <li>
-            <a>Transactions</a>
+            <Link href="/">Transactions</Link>
           </li>
         </ul>
       </div>

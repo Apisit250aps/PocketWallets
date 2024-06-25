@@ -11,7 +11,12 @@ export const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   providers: [credentials],
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 30 // 30 days
+  },
+  jwt: {
+    // Your JWT options
+    maxAge: 60 * 60 * 24 * 30 // 30 days
   },
   callbacks: {
     async jwt({ token, user }) {

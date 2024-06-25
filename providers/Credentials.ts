@@ -16,16 +16,13 @@ const credentials = Credentials({
         name: credentials.username as string
       }
     })
-    
     if (!user) {
       return null
     }
-
     const verified = comparePassword(
       credentials.password as string,
       user.password
     )
-
     if (!(user && verified)) {
       return null
     }
