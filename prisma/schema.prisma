@@ -97,16 +97,19 @@ model Wallet {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  transaction Transaction[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model Transaction {
-  id     String  @id @default(uuid())
-  userId String
-  name   String  @db.Char(255)
-  desc   String?
-  amount Decimal @db.Decimal(9, 2)
+  id       String  @id @default(uuid())
+  userId   String
+  name     String  @db.Char(255)
+  desc     String?
+  amount   Decimal @db.Decimal(9, 2)
+  walletId String
+  wallet   Wallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
 
   savedAt   DateTime @default(now())
   // 
