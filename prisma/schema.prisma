@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String          @unique
-  email         String          @unique
+  id            String    @id @default(cuid())
+  name          String    @unique
+  email         String    @unique
   password      String
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Wallet        Wallet[]
+
   // Permissions
   isAdmin       Boolean         @default(false)
   // Optional for WebAuthn support
@@ -84,4 +86,54 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Wallet {
+  id       String  @id @default(uuid())
+  name     String  @db.Char(255)
+  desc     String?
+  category Money   @default(BANK)
+  userId   String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id     String  @id @default(uuid())
+  userId String
+  name   String  @db.Char(255)
+  desc   String?
+  amount Decimal @db.Decimal(9, 2)
+
+  savedAt   DateTime @default(now())
+  // 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactionTag TransactionTag[]
+}
+
+model TransactionTag {
+  id            String      @id @default(uuid())
+  transactionId String
+  tagId         String
+  // relationals
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  Tag           Tag         @relation(fields: [tagId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id             String           @id @default(uuid())
+  name           String
+  desc           String?
+  transactionTag TransactionTag[]
+}
+
+enum Money {
+  BANK
+  CASH
+  MIXS
 }
